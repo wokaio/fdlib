@@ -1,0 +1,2 @@
+# fblib
+Fado golang library
