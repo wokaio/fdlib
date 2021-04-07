@@ -1,5 +1,5 @@
 # Fado library
-Fado global golang library
+Fado global golang utility
 
 ### Installation
 go get -u github.com/miczone/fdlib
