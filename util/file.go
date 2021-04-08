@@ -14,7 +14,10 @@
 
 package util
 
-import "os"
+import (
+	"os"
+	"path/filepath"
+)
 
 func CreateFile(fileName string) error {
 	fd, err := os.Create(fileName)
@@ -55,4 +58,20 @@ func RemoveFile(fileName string) error {
 		return err
 	}
 	return nil
+}
+
+func FileExist(filePath string) bool {
+	_, err := os.Stat(filePath)
+	if err != nil && os.IsNotExist(err) {
+		return false
+	}
+
+	return true
+}
+
+func AbsolutePath(datadir string, filename string) string {
+	if filepath.IsAbs(filename) {
+		return filename
+	}
+	return filepath.Join(datadir, filename)
 }

@@ -16,9 +16,28 @@ package util
 
 import (
 	"fmt"
+	"regexp"
 	"strconv"
+	"strings"
 	"time"
 )
+
+type PrettyDuration time.Duration
+type PrettyAge time.Time
+
+var prettyDurationRe = regexp.MustCompile(`\.[0-9]+`)
+var ageUnits = []struct {
+	Size   time.Duration
+	Symbol string
+}{
+	{12 * 30 * 24 * time.Hour, "y"},
+	{30 * 24 * time.Hour, "mo"},
+	{7 * 24 * time.Hour, "w"},
+	{24 * time.Hour, "d"},
+	{time.Hour, "h"},
+	{time.Minute, "m"},
+	{time.Second, "s"},
+}
 
 func WaitInSecond(toTime int64) {
 	waitSecs := toTime - time.Now().Unix()
@@ -62,4 +81,34 @@ func UnixToStr(timestamp int64) string {
 func NextInterval(now time.Time, interval int) int {
 	seconds := now.Second()
 	return interval - seconds%interval
+}
+
+func (d PrettyDuration) String() string {
+	label := fmt.Sprintf("%v", time.Duration(d))
+	if match := prettyDurationRe.FindString(label); len(match) > 4 {
+		label = strings.Replace(label, match, match[:4], 1)
+	}
+	return label
+}
+
+func (t PrettyAge) String() string {
+	// Calculate the time difference and handle the 0 cornercase
+	diff := time.Since(time.Time(t))
+	if diff < time.Second {
+		return "0"
+	}
+	// Accumulate a precision of 3 components before returning
+	result, prec := "", 0
+
+	for _, unit := range ageUnits {
+		if diff > unit.Size {
+			result = fmt.Sprintf("%s%d%s", result, diff/unit.Size, unit.Symbol)
+			diff %= unit.Size
+
+			if prec += 1; prec >= 3 {
+				break
+			}
+		}
+	}
+	return result
 }

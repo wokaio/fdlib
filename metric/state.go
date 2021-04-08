@@ -12,40 +12,32 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package web
+package metric
 
 import "sync/atomic"
 
-type GaugeNumber int64
+type StateNumber atomic.Value
 
-func (c *GaugeNumber) Inc(delta uint) {
-	if c == nil {
+func (s *StateNumber) Set(v string) {
+	if s == nil {
 		return
 	}
-	atomic.AddInt64((*int64)(c), int64(delta))
+
+	(*atomic.Value)(s).Store(v)
 }
 
-func (c *GaugeNumber) Dec(delta uint) {
-	if c == nil {
-		return
+func (s *StateNumber) Get() string {
+	if s == nil {
+		return ""
 	}
-	atomic.AddInt64((*int64)(c), int64(-delta))
-}
 
-func (c *GaugeNumber) Get() int64 {
-	if c == nil {
-		return 0
+	v := (*atomic.Value)(s).Load()
+	if v == nil {
+		return ""
 	}
-	return atomic.LoadInt64((*int64)(c))
+	return v.(string)
 }
 
-func (c *GaugeNumber) Set(v int64) {
-	if c == nil {
-		return
-	}
-	atomic.StoreInt64((*int64)(c), v)
-}
-
-func (c *GaugeNumber) Type() string {
-	return TypeGauge
+func (s *StateNumber) Type() string {
+	return TypeState
 }

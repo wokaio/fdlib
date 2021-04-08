@@ -4,6 +4,7 @@ go 1.16
 
 require (
 	github.com/adrg/postcode v0.1.0 // indirect
+	github.com/aristanetworks/goarista v0.0.0-20210319202508-5b0c587084ea // indirect
 	github.com/linuxpham/go.uuid v1.2.6 // indirect
 	github.com/oschwald/geoip2-golang v1.5.0 // indirect
 	github.com/speps/go-hashids v2.0.0+incompatible // indirect

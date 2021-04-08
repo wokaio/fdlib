@@ -12,26 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package web
+package metric
 
-import "sync/atomic"
+import "errors"
 
-type CounterNumber uint64
+func GetParamValue(params map[string][]string, key string) (string, error) {
+	values := params[key]
 
-func (c *CounterNumber) Inc(delta uint) {
-	if c == nil {
-		return
+	if values == nil || len(values) == 0 {
+		return "", errors.New("Key not exist in params")
 	}
-	atomic.AddUint64((*uint64)(c), uint64(delta))
+
+	return values[0], nil
 }
 
-func (c *CounterNumber) Get() int64 {
-	if c == nil {
-		return 0
-	}
-	return int64(atomic.LoadUint64((*uint64)(c)))
-}
+func GetMultiValue(params map[string][]string, key string) ([]string, error) {
+	values := params[key]
 
-func (c *CounterNumber) Type() string {
-	return TypeCounter
+	if values == nil || len(values) == 0 {
+		return nil, errors.New("Key not exist in params")
+	}
+
+	return values, nil
 }
