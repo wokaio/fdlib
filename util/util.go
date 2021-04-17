@@ -19,6 +19,7 @@ import (
 	"encoding/base64"
 	"encoding/binary"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"strconv"
 	"time"
@@ -137,4 +138,24 @@ func Deduplication(slice *[]string) {
 		}
 	}
 	*slice = (*slice)[:total]
+}
+
+func ReadTextFile(path string) ([]byte, error) {
+	status, err := Exists(path)
+	if status == false {
+		return nil, err
+	}
+
+	file, err := os.Open(path)
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
+
+	buf, err := ioutil.ReadAll(file)
+	if err != nil {
+		return nil, err
+	}
+
+	return buf, nil
 }
