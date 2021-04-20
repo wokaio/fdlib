@@ -2,7 +2,9 @@
 Fado global golang utility
 
 ### Installation
+```bash
 go get -u github.com/miczone/fdlib
+```
 
 ### Contributing
 - Please create an issue in <a href="https://github.com/miczone/fdlib/issues">issue list</a>.
