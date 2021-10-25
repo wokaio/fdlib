@@ -174,3 +174,15 @@ func StringToBytes(s string) (b []byte) {
 	sh.Cap = strh.Len
 	return b
 }
+
+func Float64ToString(num float64) string {
+	return fmt.Sprintf("%f", num)
+}
+
+func Int64ToString(num int64) string {
+	return strconv.FormatInt(num, 10)
+}
+
+func IntToString(num int64) string {
+	return Int64ToString(int64(num))
+}
