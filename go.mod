@@ -1,4 +1,4 @@
-module github.com/miczone/fdlib
+module github.com/wokaio/fdlib
 
 go 1.16
 
